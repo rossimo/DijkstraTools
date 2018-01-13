@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Nuget Release|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\DijkstraTools.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>DijkstraTools.DamionGans</PackageId>
+    <PackageVersion>0.0.1</PackageVersion>
+    <Authors>Damion Gans</Authors>
+    <Description>Toolset for creating Graphs filled with Vertices and Edges between them, and finding Paths between Vertices using the Dijkstra Algorithm.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>First alpha release</PackageReleaseNotes>
+    <Copyright>Copyright 2018 (c) Damion Gans. All rights reserved. (this may change once I know more of copyright on software)</Copyright>
+    <PackageTags>Dijkstra Graph Pathfinding Edge Vertex</PackageTags>
+  </PropertyGroup>
+</Project>
