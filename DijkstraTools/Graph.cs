@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DijkstraTools
 {
@@ -27,30 +29,45 @@ namespace DijkstraTools
             _vertices = vertices ?? new List<Vertex<T>>();
             _edges = new List<Edge<T>>();
         }
-
         /// <summary>
+        /// Adds a Vertex to the Vertices list.
+        /// </summary>
+        /// <param name="itemOfVertex">item of Vertex to add to Graph.</param>
+        /// <returns>true if succeeded, false otherwise</returns>
+        public void AddVertex(T itemOfVertex)
+        {
+            AddVertex(new Vertex<T>(itemOfVertex));
+        }
+        /// <summary>
+        /// Add range of vertices
+        /// </summary>
+        /// <param name="verticesToAdd">List of Vertex<typeparamref name="T"/> to add to the Graph.</param>
+        public void AddVertices(List<Vertex<T>> verticesToAdd)
+        {
+            if (verticesToAdd == null || verticesToAdd?.Count == 0)
+            {
+                throw new Exception("List is null or no Vertices in list.");
+            }
+            IEnumerator vertices = verticesToAdd.GetEnumerator();
+            AddVertex((Vertex<T>)vertices.Current);
+            while (vertices.MoveNext())
+            {
+                AddVertex((Vertex<T>)vertices.Current);
+            }
+        }
+        /// <summary
         /// Adds a Vertex to the Vertices list.
         /// </summary>
         /// <param name="vertex">The Vertex you want to add</param>
         /// <returns>True if succeeded, false otherwise</returns>
-        public bool AddVertex(Vertex<T> vertex)
+        public void AddVertex(Vertex<T> vertex)
         {
             if (!_vertices.Contains(vertex))
             {
-                Debug.WriteLine("Vertex already known to the Graph.");
+                throw new Exception("Vertex already known to the Graph.");
             }
-            // Try to add the Vertex to the Vertices list. If it succeeds, return true.
-            try
-            {
-                _vertices.Add(vertex);
-                return true;
-            }
-            // If it did not succeed, debug the exception and return false.
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
-            }
+            // Try to add the Vertex to the Vertices list.
+            _vertices.Add(vertex);
         }
 
         /// <summary>
@@ -59,34 +76,22 @@ namespace DijkstraTools
         /// </summary>
         /// <param name="vertex">The Rertex too remove from the Graph</param>
         /// <returns>True if succeeded, false otherwise</returns>
-        public bool RemoveVertex(Vertex<T> vertex)
+        public void RemoveVertex(Vertex<T> vertex)
         {
             // First check if vertex is already in Graph. If not, return false;
             if (!_vertices.Contains(vertex))
             {
-                Debug.WriteLine("The Vertex was not existent in the Graph. Not removing.");
-                return false;
+                throw new Exception("The Vertex was not existent in the Graph. Not removing.");
             }
-
             // Remove all Edges containing the given Vertex as starting and ending Vertex
             List<Edge<T>> edgesToRemove = _edges.FindAll(x => x.VertexFrom.Equals(vertex) || x.VertexTo.Equals(vertex));
             foreach (Edge<T> edge in edgesToRemove)
             {
                 RemoveEdge(edge);
             }
-            
             // Try to Remove the Vertex from the Vertices List. If it succeeds, return true
-            try
-            {
-                _vertices.Remove(vertex);
-                return true;
-            }
+            _vertices.Remove(vertex);
             // If it did not succeed, Debug the exception and return false.
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
-            }
         }
 
         /// <summary>
@@ -98,40 +103,27 @@ namespace DijkstraTools
         /// <param name="vertexEnd">The Vertex to end the Edge with</param>
         /// <param name="directed">True if the Edge works in both ways, false otherwise.</param>
         /// <param name="weight">the weight of the Edge</param>
-        /// <returns>The newly created Edge </returns>
-        public bool AddEdge(Vertex<T> vertexStart, Vertex<T> vertexEnd, bool directed, int weight = 1)
+        public void AddEdge(Vertex<T> vertexStart, Vertex<T> vertexEnd, bool directed, int weight = 1)
         {
             // If either one of the Vertices does not yet exist in the Vertices list, debug the problem and don't add.
             if (!(ContainsVertex(vertexStart) || ContainsVertex(vertexEnd)))
             {
-                Debug.WriteLine(
+                throw new Exception(
                     "Either one or both of the Vertices provided haven't been added as Vertex to the Graph. Please do so first.");
-                return false;
             }
 
             Edge<T> edgeFromStartToEnd = new Edge<T>(vertexStart, vertexEnd, weight);
             // Try to add the edge from vertexStart towards vertexEnd with the given weight.
-            if (!AddEdge(edgeFromStartToEnd))
-            {
-                Debug.WriteLine("Coudn't add edge from Start towards the End.");
-                return false;
-            }
-
+            AddEdge(edgeFromStartToEnd);
             // if the edge is not directed, we're done, so return true.
             if (!directed)
             {
-                return true;
+                return;
             }
-
             // Create emtpy Edge for reference.
             // Try to add the edge from vertexEnd towards vertexEnd with the given weight. 
-            
             Edge<T> edgeFromEndToStart = new Edge<T>(vertexEnd, vertexStart, weight);
-            if (!AddEdge(edgeFromEndToStart))
-            {
-                RemoveEdge(edgeFromStartToEnd);   
-            }
-            return true;
+            AddEdge(edgeFromEndToStart);
         }
 
         /// <summary>
@@ -139,38 +131,19 @@ namespace DijkstraTools
         /// </summary>
         /// <param name="edge">Edge to Add.</param>
         /// <returns></returns>
-        public bool AddEdge(Edge<T> edge)
+        public void AddEdge(Edge<T> edge)
         {
-            try
-            {
-                _edges.Add(edge);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
-            }
-
-            return true;
+            _edges.Add(edge);
+            return;
         }
 
         /// <summary>
         /// Removes the given edge from the Graph.
         /// </summary>
         /// <returns></returns>
-        public bool RemoveEdge(Edge<T> edgeToRemove)
+        public void RemoveEdge(Edge<T> edgeToRemove)
         {
-            try
-            {
-                _edges.Remove(edgeToRemove);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return false;
-            }
-
-            return true;
+            _edges.Remove(edgeToRemove);
         }
 
         /// <summary>
@@ -197,8 +170,6 @@ namespace DijkstraTools
             {
                 return true;
             }
-
-            Debug.WriteLine("The Edge is not known to this Graph.");
             return false;
         }
 

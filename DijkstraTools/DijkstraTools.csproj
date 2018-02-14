@@ -13,8 +13,22 @@
     <Authors>Damion Gans</Authors>
     <Description>Toolset for creating Graphs filled with Vertices and Edges between them, and finding Paths between Vertices using the Dijkstra Algorithm.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>First alpha release</PackageReleaseNotes>
-    <Copyright>Copyright 2018 (c) Damion Gans. All rights reserved. (this may change once I know more of copyright on software)</Copyright>
+    <PackageReleaseNotes>Improved:
+* More possibilities to add vertices and edges within the Graph class.
+* Cleaned up a lot of the code
+* Made the code more generic
+
+I still should make some documentation. But that's something Imma do when it's a bit more stable.</PackageReleaseNotes>
+    <Copyright>Copyright 2018 (c) Damion Gans. All rights reserved.</Copyright>
     <PackageTags>Dijkstra Graph Pathfinding Edge Vertex</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.2</Version>
+    <AssemblyVersion>0.0.2.0</AssemblyVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+    <RepositoryUrl>https://github.com/DamionGans/DijkstraTools</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageIconUrl>https://raw.githubusercontent.com/DamionGans/DijkstraTools/master/DijkstraTools%20Logo.png</PackageIconUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/DamionGans/DijkstraTools</PackageProjectUrl>
   </PropertyGroup>
 </Project>
